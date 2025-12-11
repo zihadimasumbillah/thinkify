@@ -1,10 +1,13 @@
+import dotenv from 'dotenv';
+// Load environment variables FIRST
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
-import dotenv from 'dotenv';
 
 import connectDB from './config/db.js';
 import errorHandler from './middleware/errorHandler.js';
@@ -15,9 +18,6 @@ import userRoutes from './routes/user.routes.js';
 import postRoutes from './routes/post.routes.js';
 import commentRoutes from './routes/comment.routes.js';
 import categoryRoutes from './routes/category.routes.js';
-
-// Load environment variables
-dotenv.config();
 
 // Connect to MongoDB
 connectDB();

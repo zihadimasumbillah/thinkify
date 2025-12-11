@@ -138,7 +138,7 @@ vercel
 vercel --prod
 
 # 6. Set environment variable (in Vercel dashboard)
-# VITE_API_URL=https://your-backend-url.com
+# VITE_API_URL=https://your-backend-url.com 
 ```
 
 ### Option 2: Deploy Backend to Railway (FREE tier)
