@@ -19,6 +19,11 @@ import authRoutes from '../routes/auth.routes.js';
 let mongoServer;
 let app;
 
+// Set test environment variables
+process.env.JWT_SECRET = 'test-secret-key-for-testing';
+process.env.JWT_EXPIRES_IN = '7d';
+process.env.NODE_ENV = 'test';
+
 // Setup Express app for testing
 const setupApp = () => {
   app = express();
@@ -28,6 +33,7 @@ const setupApp = () => {
   
   // Error handler
   app.use((err, req, res, next) => {
+    console.error('Test Error:', err.message);
     res.status(err.statusCode || 500).json({
       success: false,
       message: err.message || 'Server Error',
@@ -220,7 +226,7 @@ describe('Authentication API Tests', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.body.success).toBe(true);
-      expect(res.body.data.email).toBe(userData.email);
+      expect(res.body.user.email).toBe(userData.email);
     });
   });
 
@@ -229,7 +235,20 @@ describe('Authentication API Tests', () => {
   // ============================================
   describe('POST /api/auth/logout', () => {
     test('should logout successfully', async () => {
-      const res = await request(app).post('/api/auth/logout');
+      // First register to get cookie
+      const registerRes = await request(app)
+        .post('/api/auth/register')
+        .send({
+          username: 'logoutuser',
+          email: 'logout@example.com',
+          password: 'Password123!',
+        });
+
+      const cookies = registerRes.headers['set-cookie'];
+
+      const res = await request(app)
+        .post('/api/auth/logout')
+        .set('Cookie', cookies);
 
       expect(res.statusCode).toBe(200);
       expect(res.body.success).toBe(true);

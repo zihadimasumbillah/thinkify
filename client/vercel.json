@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "thinkify-production-48bd.up.railway.app/api/:path*"
+    }
+  ]
+}

@@ -42,8 +42,10 @@ export const sendTokenResponse = (user, statusCode, res, message = 'Success') =>
     .json({
       success: true,
       message,
-      token,
-      user: userData
+      data: {
+        token,
+        user: userData
+      }
     });
 };
 

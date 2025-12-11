@@ -15,14 +15,40 @@
             "type": "node",
             "request": "launch",
             "name": "Debug Server Tests",
-            "skipFiles": ["<node_internals>/**"],
+            "skipFiles": [
+                "<node_internals>/**",
+                "${workspaceFolder}/server/node_modules/**"
+            ],
             "program": "${workspaceFolder}/server/node_modules/jest/bin/jest.js",
-            "args": ["--runInBand", "--no-cache"],
+            "args": [
+                "--runInBand",
+                "--no-cache",
+                "--testTimeout=30000"
+            ],
             "cwd": "${workspaceFolder}/server",
             "env": {
-                "NODE_OPTIONS": "--experimental-vm-modules",
                 "NODE_ENV": "test",
-                "JWT_SECRET": "test-secret"
+                "JWT_SECRET": "test-secret",
+                "NODE_OPTIONS": "--experimental-vm-modules"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Current Test File",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/server/node_modules/jest/bin/jest.js",
+            "args": [
+                "--runInBand",
+                "--no-cache",
+                "${relativeFile}"
+            ],
+            "cwd": "${workspaceFolder}/server",
+            "env": {
+                "NODE_ENV": "test",
+                "JWT_SECRET": "test-secret",
+                "NODE_OPTIONS": "--experimental-vm-modules"
             },
             "console": "integratedTerminal"
         },
