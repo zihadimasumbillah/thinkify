@@ -13,11 +13,9 @@ import cookieParser from 'cookie-parser';
 import request from 'supertest';
 
 // Import models and routes
-import User from '../../models/User.model.js';
-import Post from '../../models/Post.model.js';
-import Category from '../../models/Category.model.js';
-import postRoutes from '../../routes/post.routes.js';
-import authRoutes from '../../routes/auth.routes.js';
+import { User, Post, Category } from '../models/index.js';
+import postRoutes from '../routes/post.routes.js';
+import authRoutes from '../routes/auth.routes.js';
 
 let mongoServer;
 let app;

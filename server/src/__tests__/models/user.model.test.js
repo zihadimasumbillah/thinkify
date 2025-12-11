@@ -8,7 +8,7 @@
 
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import User from '../../models/User.model.js';
+import { User } from '../../models/index.js';
 
 let mongoServer;
 

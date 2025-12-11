@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'moderator', 'admin'],
       default: 'user'
     },
+    isActive: {
+      type: Boolean,
+      default: true
+    },
     isVerified: {
       type: Boolean,
       default: false
@@ -90,6 +94,16 @@ userSchema.virtual('postCount', {
   count: true
 });
 
+// Virtual for followers count
+userSchema.virtual('followersCount').get(function () {
+  return this.followers ? this.followers.length : 0;
+});
+
+// Virtual for following count
+userSchema.virtual('followingCount').get(function () {
+  return this.following ? this.following.length : 0;
+});
+
 // Index for faster queries
 userSchema.index({ username: 'text', displayName: 'text' });
 userSchema.index({ createdAt: -1 });
@@ -105,6 +119,11 @@ userSchema.pre('save', async function (next) {
 
 // Compare password method
 userSchema.methods.comparePassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
+
+// Alias for matchPassword (used in some tests)
+userSchema.methods.matchPassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 

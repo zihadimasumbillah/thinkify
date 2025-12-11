@@ -13,8 +13,8 @@ import cookieParser from 'cookie-parser';
 import request from 'supertest';
 
 // Import models and routes
-import User from '../../models/User.model.js';
-import authRoutes from '../../routes/auth.routes.js';
+import { User } from '../models/index.js';
+import authRoutes from '../routes/auth.routes.js';
 
 let mongoServer;
 let app;
