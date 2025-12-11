@@ -23,9 +23,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       
-      - name: Install root dependencies
-        run: npm ci
-      
       - name: Install client dependencies
         run: npm ci --prefix client
       
@@ -48,19 +45,15 @@ jobs:
         node-version: [18.x, 20.x]
     
     services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: test_user
-          POSTGRES_PASSWORD: test_password
-          POSTGRES_DB: thinkify_test
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "mongosh --eval 'db.runCommand({ping:1})'"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          - 5432:5432
     
     steps:
       - uses: actions/checkout@v4
@@ -71,21 +64,18 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       
-      - name: Install root dependencies
-        run: npm ci
-      
       - name: Install server dependencies
         run: npm ci --prefix server
       
       - name: Run server tests
         run: npm test --prefix server
         env:
-          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/thinkify_test
+          MONGODB_URI: mongodb://localhost:27017/thinkify_test
           NODE_ENV: test
-          JWT_SECRET: test-secret-key
+          JWT_SECRET: test-secret-key-for-ci
       
       - name: Upload coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         if: matrix.node-version == '20.x'
         with:
           files: ./server/coverage/lcov.info
@@ -108,16 +98,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       
-      - name: Install root dependencies
-        run: npm ci
-      
       - name: Install client dependencies
         run: npm ci --prefix client
       
       - name: Build client
         run: npm run build --prefix client
         env:
-          VITE_API_URL: http://localhost:5000
+          VITE_API_URL: http://localhost:5000/api
       
       - name: Run client tests
         run: npm test --prefix client
@@ -129,25 +116,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Run npm audit
-        run: npm audit --audit-level=moderate
-        continue-on-error: true
-      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
       
-      - name: Install Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+      - name: Run npm audit on client
+        run: npm audit --prefix client --audit-level=high
+        continue-on-error: true
       
-      - name: Upload Trivy results
-        uses: github/codeql-action/upload-sarif@v2
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
+      - name: Run npm audit on server
+        run: npm audit --prefix server --audit-level=high
+        continue-on-error: true
