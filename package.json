@@ -1,0 +1,30 @@
+{
+  "name": "thinkify",
+  "version": "1.0.0",
+  "description": "A vibrant digital space for meaningful conversations - Forum/Social Media Hybrid",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "build": "cd client && npm run build"
+  },
+  "keywords": [
+    "mern",
+    "forum",
+    "social-media",
+    "react",
+    "nodejs",
+    "mongodb"
+  ],
+  "author": "Masum Billah Zihadi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zihadimasubillah/thinkify"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

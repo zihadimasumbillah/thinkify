@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ADE80;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#22C55E;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Brain/Think bubble icon -->
+  <circle cx="50" cy="50" r="40" fill="#121212" stroke="url(#neonGradient)" stroke-width="3" filter="url(#glow)"/>
+  <!-- T letter stylized -->
+  <text x="50" y="62" font-family="Inter, sans-serif" font-size="40" font-weight="700" fill="url(#neonGradient)" text-anchor="middle" filter="url(#glow)">T</text>
+  <!-- Decorative dots -->
+  <circle cx="25" cy="25" r="3" fill="#4ADE80" opacity="0.6"/>
+  <circle cx="75" cy="25" r="2" fill="#4ADE80" opacity="0.4"/>
+  <circle cx="75" cy="75" r="3" fill="#4ADE80" opacity="0.6"/>
+</svg>
